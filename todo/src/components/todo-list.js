@@ -1,12 +1,23 @@
 import React from 'react';
 import TodoListItem from './todo-list-item';
 
-const TodoList = () => {
-  const items = ['Learn React', 'Build Awesome App']
+// todos аналогично использованию props, в данном случае используется деструктуризация
+const TodoList = ({todos}) => {
+
+  const element = todos.map((item) => {
+    return (
+      <li key={item.id}>
+        <TodoListItem 
+          label={item.label}
+          important={item.important}
+        />
+      </li>
+    );
+  })
+
   return (
     <ul>
-      <li><TodoListItem /></li>
-      <li><TodoListItem /></li>
+      { element }
     </ul>
   );
 };
