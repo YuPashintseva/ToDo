@@ -6,13 +6,18 @@ class TodoListItem extends Component {
   constructor() {
     super();
     this.onLabelClick = () => {
-      this.setState({
-        done: true
+      this.setState((state) => {
+        return {
+          done: !state.done
+        }
       })
     };
     this.onMarkImportant = () => {
-      this.setState ({
-        important: true
+      // setState иногда работает асинхронно, по этой причине лучше вызывать через функцию
+      this.setState ((state) => {
+        return {
+          important: !state.important
+        }
       })
     }
     this.state = {
@@ -47,7 +52,8 @@ class TodoListItem extends Component {
         </button>
   
         <button type="button"
-                className="btn btn-outline-danger btn-sm float-right">
+                className="btn btn-outline-danger btn-sm float-right"
+                onClick={this.props.onDeleted}>
           <i className="fa fa-trash-o" />
         </button>
       </span>
