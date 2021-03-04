@@ -10,12 +10,22 @@ import './app.css';
 
 export default class App extends Component {
 
+  maxId = 100;
+
   state = {
     todoData: [
-      { label: 'Drink Coffee', important: false, id: 1 },
-      { label: 'Make Awesome App', important: true, id: 2 },
-      { label: 'Have a lunch', important: false, id: 3 }
+      this.createToDoItem('Drink Coffee'),
+      this.createToDoItem('Make Awesome App'),
+      this.createToDoItem('Have a lunch')
     ]
+  }
+  createToDoItem(label) {
+    return { 
+      label: label, 
+      important: false, 
+      done: false,
+      id: this.maxId++
+    }
   }
 
   deleteItem = (id) => {
@@ -29,11 +39,47 @@ export default class App extends Component {
       }
     })
   }
+  
+  addItem = (text) => {
+    const lbl = this.createToDoItem(text);
+    this.setState(({ todoData }) => {
+      const newArray = todoData;
+      newArray.push(lbl);
+      return {
+        todoData: newArray
+      }
+    })
+  }
+
+  onToggleImportant = (id) => {
+    console.log('onToggleImportant', id);
+  }
+
+  onToggleDone = (id) => {
+    this.setState(({todoData}) => {
+      const idx = todoData.findIndex((el) => el.id === id);
+      const oldItem = todoData[idx];
+      const newItem = {...oldItem, done: !oldItem.done};
+      const newArray = [
+          ...todoData.slice(0, idx),
+          newItem, 
+          ...todoData.slice(idx + 1)
+      ];
+
+      return {
+        todoData: newArray
+      }
+    });
+  }
 
   render() {
+
+    const doneCount = this.state.todoData.filter((item) => item.done === true).length;
+    const todoCount = this.state.todoData.length - doneCount;
+
     return (
       <div className="todo-app">
-        <AppHeader toDo={1} done={3} />
+        <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel d-flex">
           <SearchPanel />
           <ItemStatusFilter />
@@ -41,9 +87,13 @@ export default class App extends Component {
   
         <TodoList 
           todos={this.state.todoData}
-          onDeleted={ this.deleteItem }
+          onDeleted={this.deleteItem}
+          onToggleImportant={this.onToggleImportant}
+          onToggleDone={this.onToggleDone}
         />
-        <ItemAddForm />
+        <ItemAddForm 
+          onElementAdd = {this.addItem}
+        />
       </div>
     );
   }

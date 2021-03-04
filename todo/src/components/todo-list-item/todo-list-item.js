@@ -3,37 +3,14 @@ import './todo-list-item.css';
 
 class TodoListItem extends Component {
 
-  constructor() {
-    super();
-    this.onLabelClick = () => {
-      this.setState((state) => {
-        return {
-          done: !state.done
-        }
-      })
-    };
-    this.onMarkImportant = () => {
-      // setState иногда работает асинхронно, по этой причине лучше вызывать через функцию
-      this.setState ((state) => {
-        return {
-          important: !state.important
-        }
-      })
-    }
-    this.state = {
-      done: false,
-      important: false
-    }
-  }
 
   render () {
     const {label} = this.props;
-    const { done, important } = this.state;
     let classNames = "todo-list-item";
-    if (done) {
+    if (this.props.done) {
       classNames += ' done';
     }
-    if (important) {
+    if (this.props.important) {
       classNames += ' important';
     }
   
@@ -41,13 +18,13 @@ class TodoListItem extends Component {
       <span className={classNames}>
         <span
           className="todo-list-item-label"
-          onClick={ this.onLabelClick }>
+          onClick={ this.props.onToggleDone }>
           {label}
         </span>
   
         <button type="button"
                 className="btn btn-outline-success btn-sm float-right"
-                onClick = {this.onMarkImportant}>
+                onClick = { this.props.onToggleImportant }>
           <i className="fa fa-exclamation" />
         </button>
   

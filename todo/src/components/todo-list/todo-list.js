@@ -3,7 +3,7 @@ import TodoListItem from '../todo-list-item/todo-list-item';
 import './todo-list.css';
 
 // todos аналогично использованию props, в данном случае используется деструктуризация
-const TodoList = ({todos, onDeleted}) => {
+const TodoList = ({todos, onDeleted, onToggleImportant, onToggleDone}) => {
 
   const element = todos.map((item) => {
     return (
@@ -11,7 +11,10 @@ const TodoList = ({todos, onDeleted}) => {
         <TodoListItem 
           label={item.label}
           important={item.important}
+          done={item.done}
           onDeleted={() => onDeleted(item.id)}
+          onToggleImportant={() => onToggleImportant(item.id)}
+          onToggleDone={() => onToggleDone(item.id)}
         />
       </li>
     );
